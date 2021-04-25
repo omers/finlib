@@ -3,8 +3,8 @@ LICENSE
 README.md
 build-pp/
 build/
-finlib/__pycache__/
 test.py
 venv/
 dist/
 src/finpredict.egg*
+src/finpredict/__pycache__/
