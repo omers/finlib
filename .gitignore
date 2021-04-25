@@ -6,3 +6,5 @@ build/
 finlib/__pycache__/
 test.py
 venv/
+dist/
+src/finpredict.egg*
