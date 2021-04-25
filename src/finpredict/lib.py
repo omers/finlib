@@ -9,6 +9,7 @@ class FinData:
         self.end = None
         self.symbol = None
         self.indexes = None
+        pd.set_option("display.precision", 2)
 
     @staticmethod
     def _build_df(df):
@@ -16,6 +17,7 @@ class FinData:
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
+        df.index = df["Date"]
         df.drop(["DATE"], axis=1, inplace=True)
         return df
 
@@ -27,6 +29,7 @@ class FinData:
         df['50sma'] = df['Adj Close'].rolling(window=50).mean()
         df['100sma'] = df['Adj Close'].rolling(window=100).mean()
         df['200sma'] = df['Adj Close'].rolling(window=200).mean()
+        df['Daily Return'] = df['Adj Close'].pct_change()
         return df
 
     def get_gdp(self, start, end):
@@ -35,7 +38,8 @@ class FinData:
         return df
 
     def get_unemployment(self, start, end):
-        df = web.DataReader("UNRATE", "fred", start=start, end=end).reset_index()
+        df = web.DataReader("UNRATE", "fred", start=start, end=end) \
+            .reset_index()
         df = self._build_df(df)
         return df
 
@@ -48,7 +52,8 @@ class FinData:
         )
         df = self._build_df(df)
         df = df.rename(
-            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN"}
+            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN",
+                     "DEXCHUS": "USD/YUAN"}
         )
         return df
 
@@ -92,7 +97,8 @@ class FinData:
         return df
 
     def get_stock(self, symbol, start, end):
-        df = web.DataReader(symbol, "yahoo", start=start, end=end).reset_index()
+        df = web.DataReader(symbol, "yahoo", start=start, end=end)\
+            .reset_index()
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
