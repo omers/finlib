@@ -8,3 +8,4 @@ venv/
 dist/
 src/finpredict.egg*
 src/finpredict/__pycache__/
+.vscode/

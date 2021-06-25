@@ -1,4 +1,5 @@
 import pandas_datareader.data as web
+from pandas_datareader import wb
 import pandas as pd
 import numpy as np
 
@@ -23,13 +24,13 @@ class FinData:
 
     @staticmethod
     def _build_technical_df(df):
-        df['8ema'] = df['Adj Close'].ewm(span=8, adjust=False).mean()
-        df['21ema'] = df['Adj Close'].ewm(span=21, adjust=False).mean()
-        df['20sma'] = df['Adj Close'].rolling(window=20).mean()
-        df['50sma'] = df['Adj Close'].rolling(window=50).mean()
-        df['100sma'] = df['Adj Close'].rolling(window=100).mean()
-        df['200sma'] = df['Adj Close'].rolling(window=200).mean()
-        df['Daily Return'] = df['Adj Close'].pct_change()
+        df["8ema"] = df["Adj Close"].ewm(span=8, adjust=False).mean()
+        df["21ema"] = df["Adj Close"].ewm(span=21, adjust=False).mean()
+        df["20sma"] = df["Adj Close"].rolling(window=20).mean()
+        df["50sma"] = df["Adj Close"].rolling(window=50).mean()
+        df["100sma"] = df["Adj Close"].rolling(window=100).mean()
+        df["200sma"] = df["Adj Close"].rolling(window=200).mean()
+        df["Daily Return"] = df["Adj Close"].pct_change()
         return df
 
     def get_gdp(self, start, end):
@@ -37,9 +38,18 @@ class FinData:
         df = self._build_df(df)
         return df
 
+    def get_gdp_rate(self, country, start, end):
+        df = (
+            wb.download(
+                indicator="NY.GDP.MKTP.KD.ZG", country=[country], start=start, end=end
+            )
+                .reset_index()
+                .set_index("year")
+        )
+        return df
+
     def get_unemployment(self, start, end):
-        df = web.DataReader("UNRATE", "fred", start=start, end=end) \
-            .reset_index()
+        df = web.DataReader("UNRATE", "fred", start=start, end=end).reset_index()
         df = self._build_df(df)
         return df
 
@@ -52,8 +62,7 @@ class FinData:
         )
         df = self._build_df(df)
         df = df.rename(
-            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN",
-                     "DEXCHUS": "USD/YUAN"}
+            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN"}
         )
         return df
 
@@ -97,8 +106,7 @@ class FinData:
         return df
 
     def get_stock(self, symbol, start, end):
-        df = web.DataReader(symbol, "yahoo", start=start, end=end)\
-            .reset_index()
+        df = web.DataReader(symbol, "yahoo", start=start, end=end).reset_index()
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
@@ -119,4 +127,5 @@ class FinData:
         data = "https://api.covidtracking.com/v1/us/daily.csv"
         df = pd.read_csv(data).reset_index(drop=True)
         df["Date"] = pd.to_datetime(df["date"], format="%Y%m%d")
+        df = df.set_index("Date")
         return df
