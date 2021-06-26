@@ -9,3 +9,5 @@ dist/
 src/finpredict.egg*
 src/finpredict/__pycache__/
 .vscode/
+run.py
+__pycache__
