@@ -1,6 +1,5 @@
 # finpredict python package
-##
-Example:
+## Example Usage
 ```python
 from finpredict import FinData
 
@@ -19,3 +18,12 @@ Output:
 1571 2021-03-31  239.100006  232.389999  232.910004  235.770004  43623500.0  235.770004  ...  2021  234.571654  234.423947  233.807001  235.326554  225.657856  216.850167
 1572 2021-04-01  242.839996  238.050003  238.470001  242.350006  30312000.0  242.350006  ...  2021  236.300176  235.144498  234.588002  235.697064  225.859404  217.101135
 ```
+
+## Supported methods
+### get_gdp
+### get_unemployment
+### get_currencies
+### get_finance_data
+### get_stock
+### get_war_index
+### get_covid_stat

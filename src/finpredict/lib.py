@@ -18,7 +18,6 @@ class FinData:
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
-        df.index = df["Date"]
         df.drop(["DATE"], axis=1, inplace=True)
         return df
 
@@ -43,8 +42,8 @@ class FinData:
             wb.download(
                 indicator="NY.GDP.MKTP.KD.ZG", country=[country], start=start, end=end
             )
-                .reset_index()
-                .set_index("year")
+            .reset_index()
+            .set_index("year")
         )
         return df
 
@@ -57,8 +56,8 @@ class FinData:
         indexes = ["DEXUSEU", "DEXJPUS", "DEXCHUS"]
         df = (
             web.DataReader(indexes, "fred", start=start, end=end)
-                .fillna(method="bfill")
-                .reset_index()
+            .fillna(method="bfill")
+            .reset_index()
         )
         df = self._build_df(df)
         df = df.rename(
@@ -84,8 +83,8 @@ class FinData:
         ]
         df = (
             web.DataReader(indexes, "fred", start=start, end=end)
-                .fillna(0)
-                .reset_index()
+            .fillna(0)
+            .reset_index()
         )
         df = self._build_df(df)
         df = df.rename(
@@ -111,15 +110,17 @@ class FinData:
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
         df = self._build_technical_df(df)
+        df = df.set_index("Date")
         return df
 
     @staticmethod
     def get_war_index(start, end):
-        df = web.DataReader("ITA", "yahoo", start=start, end=end).reset_index()
-        df["Day"] = [i.day for i in df["Date"]]
-        df["Month"] = [i.month for i in df["Date"]]
-        df["Year"] = [i.year for i in df["Date"]]
-        df["Series"] = np.arange(1, len(df) + 1)
+        """
+        War Index is an index based on $ITA.
+        iShares U.S. Aerospace & Defense ETF (ITA). This ETF price reflects
+        the Index of all defense companies in US.
+        """
+        df = web.DataReader("ITA", "yahoo", start=start, end=end)
         return df
 
     @staticmethod
