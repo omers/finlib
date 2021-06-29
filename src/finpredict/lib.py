@@ -23,6 +23,9 @@ class FinData:
 
     @staticmethod
     def _build_technical_df(df):
+        """
+        This static method computes some technical indicators based on the dataframe values
+        """
         df["8ema"] = df["Adj Close"].ewm(span=8, adjust=False).mean()
         df["21ema"] = df["Adj Close"].ewm(span=21, adjust=False).mean()
         df["20sma"] = df["Adj Close"].rolling(window=20).mean()
