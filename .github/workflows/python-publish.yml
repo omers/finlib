@@ -16,6 +16,11 @@ jobs:
           python -m pip install bandit
           bandit -r src/
 
+      - name: Run tests
+        run: |
+          python -m pip install pytest
+          pytest -vvv
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
