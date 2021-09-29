@@ -2,7 +2,13 @@ import pandas_datareader.data as web
 from pandas_datareader import wb
 import pandas as pd
 import numpy as np
+import requests
 
+
+USER_AGENT = {
+    'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                   ' Chrome/91.0.4472.124 Safari/537.36')
+}
 
 class FinData:
     def __init__(self):
@@ -10,6 +16,8 @@ class FinData:
         self.end = None
         self.symbol = None
         self.indexes = None
+        self.sesh = requests.Session()
+        self.sesh.headers.update(USER_AGENT)
         pd.set_option("display.precision", 2)
 
     @staticmethod
@@ -32,6 +40,9 @@ class FinData:
         df["50sma"] = df["Adj Close"].rolling(window=50).mean()
         df["100sma"] = df["Adj Close"].rolling(window=100).mean()
         df["200sma"] = df["Adj Close"].rolling(window=200).mean()
+        df["rstd"] = df["Adj Close"].rolling(window=20).std()
+        df["bollinger_upper_band"] = df["20sma"] + 2 * df["rstd"]
+        df["bollinger_lower_band"] = df["20sma"] - 2 * df["rstd"]
         df["Daily Return"] = df["Adj Close"].pct_change()
         return df
 
@@ -108,7 +119,7 @@ class FinData:
         return df
 
     def get_stock(self, symbol, start, end):
-        df = web.DataReader(symbol, "yahoo", start=start, end=end).reset_index()
+        df = web.DataReader(symbol, "yahoo", start=start, end=end, session=self.sesh).reset_index()
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
@@ -123,7 +134,9 @@ class FinData:
         iShares U.S. Aerospace & Defense ETF (ITA). This ETF price reflects
         the Index of all defense companies in US.
         """
-        df = web.DataReader("ITA", "yahoo", start=start, end=end)
+        sesh = requests.Session()
+        sesh.headers.update(USER_AGENT)
+        df = web.DataReader("ITA", "yahoo", start=start, end=end, session=sesh)
         return df
 
     @staticmethod
