@@ -12,3 +12,4 @@ src/finpredict/__pycache__/
 run.py
 __pycache__
 lib-venv
+dev_script.py
