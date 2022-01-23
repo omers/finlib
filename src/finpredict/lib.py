@@ -146,3 +146,11 @@ class FinData:
         df["Date"] = pd.to_datetime(df["date"], format="%Y%m%d")
         df = df.set_index("Date")
         return df
+
+    @staticmethod
+    def get_solar_cycle():
+        data = "https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json"
+        df = pd.read_json(data).reset_index(drop=True)
+        df["Date"] = pd.to_datetime(df["time-tag"], format="%Y-%m")
+        df = df.set_index("Date")
+        return df
