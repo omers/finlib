@@ -13,4 +13,4 @@ def test_get_stock_dataframe_shape(import_lib):
     END = 2022
     data = import_lib
     df = data.get_stock(STOCK, START, END)
-    assert df.shape == (439, 19)
+    assert df.shape == (505, 19)
