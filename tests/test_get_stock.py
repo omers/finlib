@@ -6,7 +6,7 @@ def test_import(import_lib):
     assert data
 
 
-#@pytest.mark.skip(reason="no way of currently testing this")
+# @pytest.mark.skip(reason="no way of currently testing this")
 def test_get_stock_dataframe_shape(import_lib):
     STOCK = "AAPL"
     START = 2020
