@@ -6,9 +6,12 @@ import requests
 
 
 USER_AGENT = {
-    'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
-                   ' Chrome/91.0.4472.124 Safari/537.36')
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
+        " Chrome/91.0.4472.124 Safari/537.36"
+    )
 }
+
 
 class FinData:
     def __init__(self):
@@ -119,7 +122,9 @@ class FinData:
         return df
 
     def get_stock(self, symbol, start, end):
-        df = web.DataReader(symbol, "yahoo", start=start, end=end, session=self.sesh).reset_index()
+        df = web.DataReader(
+            symbol, "yahoo", start=start, end=end, session=self.sesh
+        ).reset_index()
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
