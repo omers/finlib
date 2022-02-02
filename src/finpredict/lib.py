@@ -95,7 +95,6 @@ class FinData:
             "FEDFUNDS",
             "PAYEMS",
             "DCOILWTICO",
-            "GOLDAMGBD228NLBM",
             "PALLFNFINDEXQ",
         ]
         df = (
@@ -158,4 +157,19 @@ class FinData:
         df = pd.read_json(data).reset_index(drop=True)
         df["Date"] = pd.to_datetime(df["time-tag"], format="%Y-%m")
         df = df.set_index("Date")
+        return df
+    
+    @staticmethod
+    def get_pie_cycles(dates):
+        """
+        input: dates = {'Date': ["2007-10-11", "2008-09-16", "2020-02-24"]}
+        """
+        df = pd.DataFrame(data=dates)
+        df["Date"] = pd.to_datetime(df["Date"])
+        df["2.15Years"] = df["Date"] + pd.DateOffset(days=913)
+        df["4.3Years"] = df["Date"] + pd.DateOffset(days=1571)
+        df["8.6Years"] = df["Date"] + pd.DateOffset(days=3141)
+        df["17.2Years"] = df["Date"] + pd.DateOffset(days=6282)
+        df["34.4Years"] = df["Date"] + pd.DateOffset(days=12564)
+        df["51.6Years"] = df["Date"] + pd.DateOffset(days=18847)
         return df
