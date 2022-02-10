@@ -77,6 +77,7 @@ class FinData:
             .reset_index()
         )
         df = self._build_df(df)
+        df = df.set_index("Date")
         df = df.rename(
             columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN"}
         )
@@ -160,9 +161,10 @@ class FinData:
         return df
     
     @staticmethod
-    def get_pie_cycles(dates):
+    def get_pi_cycles(dates):
         """
-        input: dates = {'Date': ["2007-10-11", "2008-09-16", "2020-02-24"]}
+            input: dates = {'Date': ["2007-10-11", "2008-09-16", "2020-02-24"]}
+            Each wave is built on 6 8.6 mini waves to complete 51.6 major wave
         """
         df = pd.DataFrame(data=dates)
         df["Date"] = pd.to_datetime(df["Date"])
