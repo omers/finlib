@@ -3,7 +3,7 @@ from pandas_datareader import wb
 import pandas as pd
 import numpy as np
 import requests
-
+import yfinance as yf
 
 USER_AGENT = {
     "User-Agent": (
@@ -46,7 +46,7 @@ class FinData:
         df["rstd"] = df["Adj Close"].rolling(window=20).std()
         df["bollinger_upper_band"] = df["20sma"] + 2 * df["rstd"]
         df["bollinger_lower_band"] = df["20sma"] - 2 * df["rstd"]
-        df["Daily Return"] = df["Adj Close"].pct_change()
+        df["Daily Return"] = df["Adj Close"].pct_change(1)
         return df
 
     def get_gdp(self, start, end):
