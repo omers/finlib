@@ -19,9 +19,11 @@ Output:
 1572 2021-04-01  242.839996  238.050003  238.470001  242.350006  30312000.0  242.350006  ...  2021  236.300176  235.144498  234.588002  235.697064  225.859404  217.101135
 ```
 
-## Supported methods
+## Supported methods and how to use
 ### get_gdp
+Get Global GDP 
 ### get_unemployment
+Get Unemployment rate
 ### get_currencies
 ### get_finance_data
 ### get_stock
