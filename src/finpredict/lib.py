@@ -70,7 +70,7 @@ class FinData:
         return df
 
     def get_currencies(self, start, end):
-        indexes = ["DEXUSEU", "DEXJPUS", "DEXCHUS"]
+        indexes = ["DEXUSEU", "DEXJPUS", "DEXCHUS", "DEXINUS"]
         df = (
             web.DataReader(indexes, "fred", start=start, end=end)
             .fillna(method="bfill")
