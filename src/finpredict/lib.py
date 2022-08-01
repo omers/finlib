@@ -79,7 +79,7 @@ class FinData:
         df = self._build_df(df)
         df = df.set_index("Date")
         df = df.rename(
-            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN"}
+            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN", "DEXINUS": "USD/RUPEE"}
         )
         return df
 
