@@ -50,6 +50,9 @@ class FinData:
         return df
 
     def get_gdp(self, start, end):
+        """
+            Get US GDP Rate on a selected timeframe
+        """
         df = web.DataReader("GDP", "fred", start=start, end=end).reset_index()
         df = self._build_df(df)
         return df
@@ -65,11 +68,17 @@ class FinData:
         return df
 
     def get_unemployment(self, start, end):
+        """
+            Get Unemployment rate
+        """
         df = web.DataReader("UNRATE", "fred", start=start, end=end).reset_index()
         df = self._build_df(df)
         return df
 
     def get_currencies(self, start, end):
+        """
+            Get Currency rates compared the the US Dollar
+        """
         indexes = ["DEXUSEU", "DEXJPUS", "DEXCHUS", "DEXINUS"]
         df = (
             web.DataReader(indexes, "fred", start=start, end=end)
