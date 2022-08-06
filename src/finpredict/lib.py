@@ -174,13 +174,18 @@ class FinData:
         """
             input: dates = {'Date': ["2007-10-11", "2008-09-16", "2020-02-24"]}
             Each wave is built on 6 8.6 mini waves to complete 51.6 major wave
+            ecm_dates = {"Date": ["07/20/98", "09/13/00", "11/08/02", "01/02/05",
+                  "02/27/07", "04/23/09", "06/18/11", "08/12/13", "10/07/15",
+                  "12/01/17", "01/26/20", "03/22/22", "05/16/24",
+                  "07/11/26", "09/04/28", "09/04/28", "12/24/32"]}
+
         """
         df = pd.DataFrame(data=dates)
         df["Date"] = pd.to_datetime(df["Date"])
-        df["2.15Years"] = df["Date"] + pd.DateOffset(days=913)
-        df["4.3Years"] = df["Date"] + pd.DateOffset(days=1571)
-        df["8.6Years"] = df["Date"] + pd.DateOffset(days=3141)
-        df["17.2Years"] = df["Date"] + pd.DateOffset(days=6282)
-        df["34.4Years"] = df["Date"] + pd.DateOffset(days=12564)
-        df["51.6Years"] = df["Date"] + pd.DateOffset(days=18847)
+        df["2.15Years"] = df["Date"] + pd.DateOffset(days=785.2875)
+        df["4.3Years"] = df["Date"] + pd.DateOffset(days=1570.575)
+        df["8.6Years"] = df["Date"] + pd.DateOffset(days=3141.15)
+        df["17.2Years"] = df["Date"] + pd.DateOffset(days=6282.3)
+        df["34.4Years"] = df["Date"] + pd.DateOffset(days=12564.6)
+        df["51.6Years"] = df["Date"] + pd.DateOffset(days=18846.9)
         return df
