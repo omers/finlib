@@ -47,7 +47,8 @@ class MoonPhase:
         pos = self.position(now)
         phasename = self.phase(pos)
         roundedpos = round(float(pos), 3)
-        print('{} {}'.format(phasename, roundedpos))
+        #print('{} {}'.format(phasename, roundedpos))
+        return roundedpos
 
 
 class FinData:
@@ -168,12 +169,14 @@ class FinData:
         return df
 
     def get_stock(self, symbol, start, end):
+        moon = MoonPhase()
         df = web.DataReader(
             symbol, "yahoo", start=start, end=end, session=self.sesh
         ).reset_index()
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
+        df["MoonPhase"] = [moon.calc_phase(x.strftime('%m/%d/%y')) for x in df["Date"]]
         df = self._build_technical_df(df)
         df = df.set_index("Date")
         return df
