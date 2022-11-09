@@ -14,3 +14,8 @@ __pycache__
 lib-venv
 dev_script.py
 dev/
+*.csv
+.coverage
+load_ts.py
+monday.py
+phase.py
