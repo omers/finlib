@@ -1,9 +1,8 @@
 import pandas_datareader.data as web
 from pandas_datareader import wb
 import pandas as pd
-import numpy as np
 import requests
-import yfinance as yf
+import math, decimal, datetime
 
 USER_AGENT = {
     "User-Agent": (
@@ -11,6 +10,43 @@ USER_AGENT = {
         " Chrome/91.0.4472.124 Safari/537.36"
     )
 }
+
+class MoonPhase:
+    def __init__(self) -> None:
+        self.dec = decimal.Decimal
+    
+    def position(self, now=None):
+        if now is None:
+            now = datetime.datetime.now()
+        else:
+            now = datetime.datetime.strptime(now, '%m/%d/%y')
+
+        diff = now - datetime.datetime(2001, 1, 1)
+        days = self.dec(diff.days) + (self.dec(diff.seconds) / self.dec(86400))
+        lunations = self.dec("0.20439731") + (days * self.dec("0.03386319269"))
+
+        return lunations % self.dec(1)
+
+    def phase(self, pos): 
+        index = (pos * self.dec(8)) + self.dec("0.5")
+        index = math.floor(index)
+        return {
+            0: "New Moon", 
+            1: "Waxing Crescent", 
+            2: "First Quarter", 
+            3: "Waxing Gibbous", 
+            4: "Full Moon", 
+            5: "Waning Gibbous", 
+            6: "Last Quarter", 
+            7: "Waning Crescent"
+        }[int(index) & 7]
+    
+    def calc_phase(self, now):
+        pos = self.position(now)
+        phasename = self.phase(pos)
+        roundedpos = round(float(pos), 3)
+        #print('{} {}'.format(phasename, roundedpos))
+        return roundedpos
 
 
 class FinData:
@@ -131,12 +167,14 @@ class FinData:
         return df
 
     def get_stock(self, symbol, start, end):
+        moon = MoonPhase()
         df = web.DataReader(
             symbol, "yahoo", start=start, end=end, session=self.sesh
         ).reset_index()
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
+        df["MoonPhase"] = [moon.calc_phase(x.strftime('%m/%d/%y')) for x in df["Date"]]
         df = self._build_technical_df(df)
         df = df.set_index("Date")
         return df
