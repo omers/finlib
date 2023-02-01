@@ -125,7 +125,7 @@ class FinData:
         """
             Get Currency rates compared the the US Dollar
         """
-        indexes = ["DEXUSEU", "DEXJPUS", "DEXCHUS", "DEXINUS"]
+        indexes = ["DEXUSEU", "DEXJPUS", "DEXCHUS", "DEXINUS", "DEXUSUK", "DEXCAUS"]
         df = (
             web.DataReader(indexes, "fred", start=start, end=end)
             .fillna(method="bfill")
@@ -134,7 +134,8 @@ class FinData:
         df = self._build_df(df)
         df = df.set_index("Date")
         df = df.rename(
-            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN", "DEXINUS": "USD/RUPEE"}
+            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN",
+                     "DEXINUS": "USD/RUPEE", "DEXUSUK": "USD/POUND", "DEXCAUS": "USD/CANADIAN"}
         )
         return df
 
