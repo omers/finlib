@@ -72,6 +72,16 @@ class FinData:
     def _build_technical_df(df):
         """
         This static method computes some technical indicators based on the dataframe values
+        8ema: 8 days exponential moving average
+        21ema: 21 days exponential moving average
+        20sma: 20 days moving average
+        50sma: 50 days moving average
+        100sma: 100 days moving average
+        200sma: 200 days moving average
+        rstd: TBD
+        bollinger_upper_band: TBD
+        bollinger_lower_band: TBD
+        Daily Return: The % change from yesterday
         """
         df["8ema"] = df["Adj Close"].ewm(span=8, adjust=False).mean()
         df["21ema"] = df["Adj Close"].ewm(span=21, adjust=False).mean()
@@ -82,7 +92,7 @@ class FinData:
         df["rstd"] = df["Adj Close"].rolling(window=20).std()
         df["bollinger_upper_band"] = df["20sma"] + 2 * df["rstd"]
         df["bollinger_lower_band"] = df["20sma"] - 2 * df["rstd"]
-        df["Daily Return"] = df["Adj Close"].pct_change(1)
+        df["Daily Return"] = df["Adj Close"].pct_change(1) * 100
         return df
 
     def get_gdp(self, start, end):
@@ -115,7 +125,7 @@ class FinData:
         """
             Get Currency rates compared the the US Dollar
         """
-        indexes = ["DEXUSEU", "DEXJPUS", "DEXCHUS", "DEXINUS"]
+        indexes = ["DEXUSEU", "DEXJPUS", "DEXCHUS", "DEXINUS", "DEXUSUK", "DEXCAUS"]
         df = (
             web.DataReader(indexes, "fred", start=start, end=end)
             .fillna(method="bfill")
@@ -124,7 +134,8 @@ class FinData:
         df = self._build_df(df)
         df = df.set_index("Date")
         df = df.rename(
-            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN", "DEXINUS": "USD/RUPEE"}
+            columns={"DEXUSEU": "USD/EU", "DEXJPUS": "USD/YEN", "DEXCHUS": "USD/YUAN",
+                     "DEXINUS": "USD/RUPEE", "DEXUSUK": "USD/POUND", "DEXCAUS": "USD/CANADIAN"}
         )
         return df
 
