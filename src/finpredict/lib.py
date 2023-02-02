@@ -3,6 +3,7 @@ from pandas_datareader import wb
 import pandas as pd
 import requests
 import math, decimal, datetime
+import yfinance as yf
 
 USER_AGENT = {
     "User-Agent": (
@@ -83,16 +84,16 @@ class FinData:
         bollinger_lower_band: TBD
         Daily Return: The % change from yesterday
         """
-        df["8ema"] = df["Adj Close"].ewm(span=8, adjust=False).mean()
-        df["21ema"] = df["Adj Close"].ewm(span=21, adjust=False).mean()
-        df["20sma"] = df["Adj Close"].rolling(window=20).mean()
-        df["50sma"] = df["Adj Close"].rolling(window=50).mean()
-        df["100sma"] = df["Adj Close"].rolling(window=100).mean()
-        df["200sma"] = df["Adj Close"].rolling(window=200).mean()
-        df["rstd"] = df["Adj Close"].rolling(window=20).std()
+        df["8ema"] = df["Close"].ewm(span=8, adjust=False).mean()
+        df["21ema"] = df["Close"].ewm(span=21, adjust=False).mean()
+        df["20sma"] = df["Close"].rolling(window=20).mean()
+        df["50sma"] = df["Close"].rolling(window=50).mean()
+        df["100sma"] = df["Close"].rolling(window=100).mean()
+        df["200sma"] = df["Close"].rolling(window=200).mean()
+        df["rstd"] = df["Close"].rolling(window=20).std()
         df["bollinger_upper_band"] = df["20sma"] + 2 * df["rstd"]
         df["bollinger_lower_band"] = df["20sma"] - 2 * df["rstd"]
-        df["Daily Return"] = df["Adj Close"].pct_change(1) * 100
+        df["Daily Return"] = df["Close"].pct_change(1) * 100
         return df
 
     def get_gdp(self, start, end):
@@ -179,9 +180,11 @@ class FinData:
 
     def get_stock(self, symbol, start, end):
         moon = MoonPhase()
-        df = web.DataReader(
-            symbol, "yahoo", start=start, end=end, session=self.sesh
-        ).reset_index()
+        # df = web.DataReader(
+        #     symbol, "yahoo", start=start, end=end, session=self.sesh
+        # ).reset_index()
+        ticker = yf.Ticker(symbol)
+        df = ticker.history(period="max").reset_index()
         df["Day"] = [i.day for i in df["Date"]]
         df["Month"] = [i.month for i in df["Date"]]
         df["Year"] = [i.year for i in df["Date"]]
@@ -191,7 +194,7 @@ class FinData:
         return df
 
     @staticmethod
-    def get_war_index(start, end):
+    def get_war_index():
         """
         War Index is an index based on $ITA.
         iShares U.S. Aerospace & Defense ETF (ITA). This ETF price reflects
@@ -199,7 +202,9 @@ class FinData:
         """
         sesh = requests.Session()
         sesh.headers.update(USER_AGENT)
-        df = web.DataReader("ITA", "yahoo", start=start, end=end, session=sesh)
+        #df = web.DataReader("ITA", "yahoo", start=start, end=end, session=sesh)
+        ticker = yf.Ticker("ITA")
+        df = ticker.history(period="max").reset_index()
         return df
 
     @staticmethod
