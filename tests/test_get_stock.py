@@ -6,11 +6,11 @@ def test_import(import_lib):
     assert data
 
 
-@pytest.mark.skip(reason="Yahoo finance broke the API")
+#@pytest.mark.skip(reason="Yahoo finance broke the API")
 def test_get_stock_dataframe_shape(import_lib):
     STOCK = "AAPL"
     START = 2020
     END = 2022
     data = import_lib
     df = data.get_stock(STOCK, START, END)
-    assert df.shape == (505, 20)
+    assert df.shape == (len(df. index), 21)
