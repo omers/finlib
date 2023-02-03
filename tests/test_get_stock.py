@@ -12,5 +12,5 @@ def test_get_stock_dataframe_shape(import_lib):
     START = 2020
     END = 2022
     data = import_lib
-    df = data.get_stock(STOCK, START, END)
+    df = data.get_stock(STOCK)
     assert df.shape == (len(df. index), 21)
