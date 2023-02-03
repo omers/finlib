@@ -178,7 +178,7 @@ class FinData:
         )
         return df
 
-    def get_stock(self, symbol, start, end):
+    def get_stock(self, symbol):
         moon = MoonPhase()
         # df = web.DataReader(
         #     symbol, "yahoo", start=start, end=end, session=self.sesh
